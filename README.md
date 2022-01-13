@@ -3,7 +3,7 @@
  
  ## Features
  <ul>
-	<li>-15 complete instructions</li>
+	<li>15 complete instructions</li>
 	<li>8-bit registers, with 16-bit addressing to access up to 64k addresses</li>
  </ul>
  
