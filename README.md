@@ -4,6 +4,6 @@
  
  My next two goals in mind:
  <ul> 
-	<li>-Add remaining needed instructions such as branching and bitwise operations</li>
-	<li>-Write an assembler so code can be written in primitive assembly rather than byte code</li>
+	<li>Add remaining needed instructions such as branching and bitwise operations</li>
+	<li>Write an assembler so code can be written in primitive assembly rather than byte code</li>
  </ul> 
