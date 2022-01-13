@@ -10,11 +10,11 @@
  ## Memory Map
  **Note:** *This memory map layout is certaintly not the best or most efficient way to do this, but it has worked without much issue thus far.*
  
-	|0x0000 - 0xFFFF | Full range of addresable ram. 64k|
+	|0x0000 - 0xFFFF | Full range of addresable ram. 64k
 	|----------------|----------------------------------|
-	|0x0000 - 0x3E80 | Rom load section. 16k			|
-	|0x3E81 - 0x4268 | Stack. 1k						|
-	|0x4269 - 0xFFFF | Free ram. 46k					|
+	|0x0000 - 0x3E80 | Rom load section. 16k			
+	|0x3E81 - 0x4268 | Stack. 1k						
+	|0x4269 - 0xFFFF | Free ram. 46k					
 	
  ## Goals
  <ul> 
