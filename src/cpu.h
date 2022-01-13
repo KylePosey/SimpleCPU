@@ -20,7 +20,7 @@ uint8_t memory[0xFFFF] = {};
 	0x4269 - 0xFFFF | Free ram. 46k
 */
 
-uint8_t pc = 0;
+uint16_t pc = 0;
 uint8_t sp = 0;
 
 void init_cpu(const uint8_t* rom, size_t length)
@@ -279,6 +279,48 @@ void OP4D_TYA()
 	pc++;
 	printf("A register: %02hhX\n", registers[0]);
 }
+//5- Instructions
+void OP5A_BNE()
+{
+	//BNE - BNE $JMP_ADDR, $ or #
+	// "BNE $0x1B, #0x42"
+	// So, This branches to address 0x1B if 0x42 != a register value
+	pc++;
+	uint8_t b1 = read_byte();
+	pc++;
+	uint8_t b2 = read_byte();
+	pc++;
+	uint16_t word = combine_bytes(b1, b2);
+	
+	uint8_t ins = read_byte();
+	if (ins == 0x00)
+	{
+		pc++;
+		uint8_t b1 = read_byte();
+		pc++;
+		if (b1 != registers[0])
+		{
+			pc = word;
+		}
+	}
+	else
+	{
+		uint8_t bb1 = read_byte();
+		pc++;
+		uint8_t bb2 = read_byte();
+		pc++;
+		uint16_t wword = combine_bytes(bb1, bb2);
+		if (word < 0x4269 || word > 0xFFFF)
+		{
+			printf("FATAL ERROR: Segmentation Fault\n");
+			exit(139);
+		}
+		if (memory[wword] != registers[0])
+		{
+			pc = word;
+		}
+	}
+}
 
 void decode(uint8_t OP)
 {
@@ -328,6 +370,9 @@ void decode(uint8_t OP)
 			break;
 		case 0x4D:
 			OP4D_TYA();
+			break;
+		case 0x5A:
+			OP5A_BNE();
 			break;
 		default:
 			printf("FATAL ERROR: Unknown or illegal code.\n");
