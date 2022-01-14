@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <inttypes.h>
 #include <string.h>
+#include <ctype.h>
+
+uint8_t op_lookup(char* ins);
 
 int main(int argc, char **argv)
 {
@@ -44,7 +47,7 @@ int main(int argc, char **argv)
 		{
 			if (file_buffer[x] != '\n')
 			{
-				buffer[j][x - last_index] = file_buffer[x];
+				buffer[j][x - last_index] = toupper(file_buffer[x]);
 			}
 			else
 			{
@@ -52,13 +55,26 @@ int main(int argc, char **argv)
 				x = fsize + 1;
 			}
 		}
+		buffer[j][strcspn(buffer[j], "\n")] = '\0';
 	}
 
-	/*printf("LineIndex: %d\n", line_index);
+	char delim[] = " ";
 	for (int y = 0; y < line_index; y++)
 	{
-		printf("%s\n", buffer[y]);
-	}*/
+		char *ptr = strtok(buffer[y], delim);
+		while (ptr != NULL)
+		{
+			uint8_t b = op_lookup(ptr);
+			if (b != 0x00)
+			{
+				bytes[byte_index] = b;
+				printf("%02hhX\n", b);
+			}
+			ptr = strtok(NULL, delim);
+		}
+	}
+
+	printf("\n\ncompleted op\n%s\n", buffer[0]);
 
 	return 0;
 
@@ -83,4 +99,16 @@ int main(int argc, char **argv)
 
 	fclose(fp_write);
 	return 0;
+}
+
+uint8_t op_lookup(char* ins)
+{
+	//printf("%s\n", ins);
+	if (strcmp(ins, "NOP") == 0)
+	{
+		printf("trueee\n");
+		return 0x0A;
+	}
+	else
+		return 0x00;
 }
