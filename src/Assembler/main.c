@@ -4,6 +4,7 @@
 #include <string.h>
 #include <ctype.h>
 
+int op_decode(char* ins, char* r_ins);
 uint8_t op_lookup(char* ins);
 
 int main(int argc, char **argv)
@@ -70,11 +71,30 @@ int main(int argc, char **argv)
 				bytes[byte_index] = b;
 				printf("%02hhX\n", b);
 			}
+			else
+			{
+				size_t le = strlen(ptr);
+				for (int i = 0; i < le; i++)
+				{
+					if (ptr[i] == '\0')
+					{
+						goto b_term;
+					}
+					if (ptr[i] == '#')
+					{
+						bytes[byte_index] = 0x00;
+						byte_index++;
+					}
+					//else if ()		
+				}
+
+				b_term:
+			}
 			ptr = strtok(NULL, delim);
 		}
 	}
 
-	printf("\n\ncompleted op\n%s\n", buffer[0]);
+	printf("\n\ncompleted op\n");
 
 	return 0;
 
@@ -101,13 +121,50 @@ int main(int argc, char **argv)
 	return 0;
 }
 
+int op_decode(char* ins, char* r_ins)
+{
+	//return 0 if true, 1 if false
+	size_t length = strlen(ins);
+	size_t max_ins = strlen(r_ins);
+	if (length >= max_ins)
+	{
+		int i = 0;
+		for (i = 0; i < max_ins; i++)
+		{
+			if (ins[i] != r_ins[i])
+			{
+				return 1;
+			}
+		}
+		if (length > max_ins)
+		{
+			if (ins[i + 1] == '\0' || ins[i + 1] == '\n')// || ins[i + 1] == '')
+			{
+				return 0;
+			}
+			return 1;
+		}
+		return 0;
+	}
+	else
+		return 1;
+}
+
 uint8_t op_lookup(char* ins)
 {
+
 	//printf("%s\n", ins);
-	if (strcmp(ins, "NOP") == 0)
+	if (op_decode(ins, "NOP") == 0)
 	{
-		printf("trueee\n");
 		return 0x0A;
+	}
+	else if (op_decode(ins, "ADD") == 0)
+	{
+		return 0x3A;
+	}
+	else if (op_decode(ins, "LDA") == 0))
+	{
+		return 0x1B;
 	}
 	else
 		return 0x00;
