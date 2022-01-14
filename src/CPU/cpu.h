@@ -23,13 +23,20 @@ uint8_t memory[0xFFFF] = {};
 uint16_t pc = 0;
 uint8_t sp = 0;
 
-void init_cpu(const uint8_t* rom, size_t length)
+void init_cpu(FILE *fp)
 {
 	sp = STACK_START_ADDR;
 
-	for (int i = 0; i < length; i++)
+	uint8_t buffer[0x3E80] = {};
+
+	for (int i = 0; i < 0x3E80; i++)
 	{
-		memory[i] = rom[i];
+		fread(buffer+i, 1, 1, fp);
+	}
+
+	for (int j = 0; j < 0x3E80; j++)
+	{
+		memory[j] = buffer[j];
 	}
 }
 
